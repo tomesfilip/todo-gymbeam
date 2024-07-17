@@ -22,7 +22,7 @@ export const TaskItem = ({ task }: TaskItemProps) => {
 
   return (
     <>
-      <div className="h-8 flex justify-between items-center gap-2 md:gap-4 px-2">
+      <div className="h-8 flex justify-between items-center gap-2 md:gap-4 px-2 w-full">
         <ToggleCompletedForm
           id={id}
           userId={userId}

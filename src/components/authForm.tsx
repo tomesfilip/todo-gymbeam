@@ -1,3 +1,6 @@
+import { useRef } from "react";
+import { toast } from "sonner";
+
 import { login, register } from "@/server/actions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
@@ -13,11 +16,11 @@ const AuthFormContent = ({ buttonText }: AuthFormContentProps) => {
   return (
     <>
       <div className="grid gap-1">
-        <label htmlFor="username">Username</label>
+        <label htmlFor="name">Username</label>
         <input
-          id="username"
+          id="name"
           type="text"
-          name="username"
+          name="name"
           className="px-2 py-1 border border-gray-500 rounded-lg"
         />
       </div>
@@ -38,6 +41,9 @@ const AuthFormContent = ({ buttonText }: AuthFormContentProps) => {
 };
 
 export const AuthForm = ({ setIsDialogOpen }: Props) => {
+  const refRegister = useRef<HTMLFormElement>(null);
+  const refLogin = useRef<HTMLFormElement>(null);
+
   return (
     <>
       <Tabs defaultValue="register" className="w-full max-w-[400px]">
@@ -50,12 +56,28 @@ export const AuthForm = ({ setIsDialogOpen }: Props) => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="register">
-          <form action={register} className="grid gap-4">
+          <form
+            ref={refRegister}
+            action={async (formData) => {
+              refRegister.current?.reset();
+              await register(formData);
+              toast("Registration successfull. Now please login");
+            }}
+            className="grid gap-4"
+          >
             <AuthFormContent buttonText="Register" />
           </form>
         </TabsContent>
         <TabsContent value="login">
-          <form action={login} className="grid gap-4">
+          <form
+            ref={refLogin}
+            action={async (formData) => {
+              refLogin.current?.reset();
+              await login(formData);
+              setIsDialogOpen(false);
+            }}
+            className="grid gap-4"
+          >
             <AuthFormContent buttonText="Login" />
           </form>
         </TabsContent>

@@ -1,10 +1,11 @@
 "use client";
 
-import { TaskType } from "@/lib/AppTypes";
-import { editTask } from "@/server/actions";
 import { useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
+
+import { TaskType } from "@/lib/AppTypes";
+import { editTask } from "@/server/actions";
 
 type Props = {
   task: TaskType;

@@ -30,10 +30,9 @@ export async function getTasksByUser(): Promise<{
 }
 
 export async function addTask(formData: FormData) {
-  const userId = formData.get("userId");
-
+  const userId = cookies().get("userId");
   if (!userId) {
-    throw new Error("User not found");
+    return { error: "User not found. Please login" };
   }
 
   const schema = z.object({
@@ -48,7 +47,7 @@ export async function addTask(formData: FormData) {
 
   try {
     const res = await fetch(
-      `https://${process.env.MOCKAPI_KEY}.mockapi.io/api/users/${userId}/tasks`,
+      `https://${process.env.MOCKAPI_KEY}.mockapi.io/api/users/${userId.value}/tasks`,
       {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -65,15 +64,14 @@ export async function addTask(formData: FormData) {
 }
 
 export async function editTask(formData: FormData) {
-  const taskId = formData.get("taskId");
-  const userId = formData.get("userId");
-
-  if (!taskId) {
-    throw new Error("Task not found");
+  const userId = cookies().get("userId");
+  if (!userId) {
+    return { error: "User not found. Please login" };
   }
 
-  if (!userId) {
-    throw new Error("User not found");
+  const taskId = formData.get("taskId");
+  if (!taskId) {
+    throw new Error("Task not found");
   }
 
   const schema = z.object({
@@ -88,7 +86,7 @@ export async function editTask(formData: FormData) {
 
   try {
     const res = await fetch(
-      `https://${process.env.MOCKAPI_KEY}.mockapi.io/api/users/${userId}/tasks/${taskId}`,
+      `https://${process.env.MOCKAPI_KEY}.mockapi.io/api/users/${userId.value}/tasks/${taskId}`,
       {
         method: "PUT",
         headers: { "content-type": "application/json" },
@@ -105,25 +103,23 @@ export async function editTask(formData: FormData) {
 }
 
 export async function deleteTask(formData: FormData) {
-  const taskId = formData.get("taskId");
-  const userId = formData.get("userId");
+  const userId = cookies().get("userId");
+  if (!userId) {
+    return { error: "User not found. Please login" };
+  }
 
+  const taskId = formData.get("taskId");
   if (!taskId) {
     throw new Error("Task not found");
   }
 
-  if (!userId) {
-    throw new Error("User not found");
-  }
-
   try {
     const res = await fetch(
-      `https://${process.env.MOCKAPI_KEY}.mockapi.io/api/users/${userId}/tasks/${taskId}`,
+      `https://${process.env.MOCKAPI_KEY}.mockapi.io/api/users/${userId.value}/tasks/${taskId}`,
       {
         method: "DELETE",
       },
     );
-
     if (!res.ok) {
       throw new Error("Failed to delete a task");
     }
@@ -135,21 +131,21 @@ export async function deleteTask(formData: FormData) {
 }
 
 export async function toggleCompleted(formData: FormData) {
-  const taskId = formData.get("taskId");
-  const userId = formData.get("userId");
-  const isCompleted = formData.get("isCompleted");
+  const userId = cookies().get("userId");
+  if (!userId) {
+    return { error: "User not found. Please login" };
+  }
 
+  const taskId = formData.get("taskId");
   if (!taskId) {
     throw new Error("Task not found");
   }
 
-  if (!userId) {
-    throw new Error("User not found");
-  }
+  const isCompleted = formData.get("isCompleted");
 
   try {
     const res = await fetch(
-      `https://${process.env.MOCKAPI_KEY}.mockapi.io/api/users/${userId}/tasks/${taskId}`,
+      `https://${process.env.MOCKAPI_KEY}.mockapi.io/api/users/${userId.value}/tasks/${taskId}`,
       {
         method: "PUT",
         headers: { "content-type": "application/json" },
@@ -173,12 +169,12 @@ export async function register(formData: FormData) {
   // TODO: use hashed password with a salt instead of plain text
 
   const schema = z.object({
-    username: z.string().min(5),
+    name: z.string().min(5),
     password: z.string().min(5),
   });
 
   const data = schema.parse({
-    username: formData.get("username"),
+    name: formData.get("name"),
     password: formData.get("password"),
   });
 
@@ -202,12 +198,12 @@ export async function register(formData: FormData) {
 
 export async function login(formData: FormData) {
   const schema = z.object({
-    username: z.string().min(5),
+    name: z.string().min(5),
     password: z.string().min(5),
   });
 
   const data = schema.parse({
-    username: formData.get("username"),
+    name: formData.get("name"),
     password: formData.get("password"),
   });
 
@@ -222,8 +218,7 @@ export async function login(formData: FormData) {
 
     const users: UserType[] = await res.json();
     const foundUser = users.find(
-      ({ name, password }) =>
-        name === data.username && password === data.password,
+      ({ name, password }) => name === data.name && password === data.password,
     );
 
     if (!foundUser) {

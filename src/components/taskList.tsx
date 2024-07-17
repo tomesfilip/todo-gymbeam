@@ -4,7 +4,6 @@ import { useState } from "react";
 import { IoAdd } from "react-icons/io5";
 
 import { TaskType } from "@/lib/AppTypes";
-import { cookies } from "next/headers";
 import { AddTaskForm } from "./addForm";
 import { AuthForm } from "./authForm";
 import { FormDialog } from "./formDialog";
@@ -30,13 +29,8 @@ export const TaskList = ({ userId, tasks, error }: Props) => {
           Authenticate
         </button>
       )}
-      {tasks && tasks.length > 0 && (
+      {userId && (
         <>
-          <div className="flex flex-col gap-5 overflow-auto max-h-[360px]">
-            {tasks.map((task) => (
-              <TaskItem key={task.id} task={task} />
-            ))}
-          </div>
           <button
             className="rounded-full size-20 flex items-center justify-center bg-grey-primary absolute -bottom-[4rem] left-1/2 -translate-x-1/2"
             onClick={() => setIsAddFormDialogOpen(true)}
@@ -52,6 +46,13 @@ export const TaskList = ({ userId, tasks, error }: Props) => {
             <AddTaskForm setIsDialogOpen={setIsAddFormDialogOpen} />
           </FormDialog>
         </>
+      )}
+      {tasks && tasks.length > 0 && (
+        <div className="flex flex-col gap-5 overflow-auto max-h-[360px] w-full">
+          {tasks.map((task) => (
+            <TaskItem key={task.id} task={task} />
+          ))}
+        </div>
       )}
       <FormDialog
         title="Authenticate"

@@ -10,4 +10,5 @@ export type UserType = {
   id: string;
   createdAt: string;
   name: string;
+  password: string;
 };

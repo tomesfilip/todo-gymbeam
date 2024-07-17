@@ -1,7 +1,11 @@
 import { login, register } from "@/server/actions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 
-export const AuthModal = () => {
+type Props = {
+  setIsDialogOpen: (value: boolean) => void;
+};
+
+export const AuthForm = ({ setIsDialogOpen }: Props) => {
   return (
     <>
       <Tabs defaultValue="register" className="w-[400px]">

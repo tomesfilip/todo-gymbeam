@@ -1,7 +1,8 @@
 "use server";
 
-import { TaskType } from "@/lib/AppTypes";
+import { TaskType, UserType } from "@/lib/AppTypes";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { z } from "zod";
 
 export async function getTasksByUser(userId: string): Promise<{
@@ -164,6 +165,82 @@ export async function toggleCompleted(formData: FormData) {
   }
 }
 
-export async function register(formData: FormData) {}
+export async function register(formData: FormData) {
+  // TODO: use hashed password with a salt instead of plain text
 
-export async function login(formData: FormData) {}
+  const schema = z.object({
+    username: z.string().min(5),
+    password: z.string().min(5),
+  });
+
+  const data = schema.parse({
+    username: formData.get("username"),
+    password: formData.get("password"),
+  });
+
+  try {
+    const res = await fetch(
+      `https://${process.env.MOCKAPI_KEY}.mockapi.io/api/users`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data),
+      },
+    );
+    if (!res.ok) {
+      throw new Error("Error while creating user");
+    }
+    revalidatePath("/");
+  } catch (error) {
+    throw new Error("Failed to create a task");
+  }
+}
+
+export async function login(formData: FormData): Promise<{
+  success?: UserType;
+  error?: string;
+}> {
+  const schema = z.object({
+    username: z.string().min(5),
+    password: z.string().min(5),
+  });
+
+  const data = schema.parse({
+    username: formData.get("username"),
+    password: formData.get("password"),
+  });
+
+  try {
+    const res = await fetch(
+      `https://${process.env.MOCKAPI_KEY}.mockapi.io/api/users`,
+    );
+
+    if (!res.ok) {
+      return { error: "Error while logging in" };
+    }
+
+    const users: UserType[] = await res.json();
+    const foundUser = users.find(
+      ({ name, password }) =>
+        name === data.username && password === data.password,
+    );
+
+    if (!foundUser) {
+      return { error: "Credentials does not match any user" };
+    }
+
+    const expires = new Date(Date.now() + 3600 * 1000);
+
+    cookies().set({
+      name: "userId",
+      value: foundUser.id,
+      expires: expires,
+      path: "/",
+      httpOnly: true,
+    });
+
+    return { success: foundUser };
+  } catch (error) {
+    throw new Error("Failed to log in");
+  }
+}

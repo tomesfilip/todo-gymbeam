@@ -1,13 +1,20 @@
-import { TaskType } from "@/app/lib/AppTypes";
+import { TaskType } from "@/lib/AppTypes";
 import { deleteTask } from "@/server/actions";
+import { toast } from "sonner";
 
 export const DeleteForm = ({ id, userId }: Pick<TaskType, "id" | "userId">) => {
   return (
-    // TODO: add is loading state - disable the button
-    <form action={deleteTask}>
+    <form
+      action={async (formData) => {
+        await deleteTask(formData);
+        toast("Task deleted");
+      }}
+    >
       <input type="hidden" name="taskId" value={id} />
       <input type="hidden" name="userId" value={userId} />
-      <button>X</button>
+      <button className="bg-red-600 p-2 rounded-lg flex items-center gap-4 text-white w-full justify-center">
+        <span>Delete</span>
+      </button>
     </form>
   );
 };

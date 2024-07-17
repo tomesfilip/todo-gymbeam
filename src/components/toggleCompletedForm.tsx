@@ -1,22 +1,34 @@
-import { TaskType } from "@/app/lib/AppTypes";
+"use client";
+
+import { TaskType } from "@/lib/AppTypes";
 import { toggleCompleted } from "@/server/actions";
+import clsx from "clsx";
+import { useFormStatus } from "react-dom";
 
 export const ToggleCompletedForm = ({
   id,
   userId,
   isCompleted,
 }: Pick<TaskType, "id" | "userId" | "isCompleted">) => {
-  // TODO: add is loading state - disable the button
+  const { pending } = useFormStatus();
+
   return (
-    <form action={toggleCompleted}>
+    <form action={toggleCompleted} className="flex items-center">
       <input type="hidden" name="taskId" value={id} />
       <input type="hidden" name="userId" value={userId} />
       <input
         type="hidden"
         name="isCompleted"
-        value={isCompleted ? "checked" : undefined}
+        value={isCompleted ? "checked" : "unchecked"}
       />
-      <button>{isCompleted ? "[x]" : "[ ]"}</button>
+      <button
+        aria-disabled={pending}
+        disabled={pending}
+        className={clsx(
+          "rounded-full border-red-500 border size-5 hover:ring-2 ring-slate-400 disabled:bg-opacity-50 disabled:border-opacity-50",
+          isCompleted ? "bg-red-500" : "bg-transparent",
+        )}
+      />
     </form>
   );
 };

@@ -5,15 +5,19 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
-export async function getTasksByUser(userId: string): Promise<{
+export async function getTasksByUser(): Promise<{
   success?: TaskType[];
   error?: string;
 }> {
   try {
-    const res = await fetch(
-      `https://${process.env.MOCKAPI_KEY}.mockapi.io/api/users/${userId}/tasks`,
-    );
+    const userId = cookies().get("userId");
+    if (!userId) {
+      return { error: "User not found. Please login" };
+    }
 
+    const res = await fetch(
+      `https://${process.env.MOCKAPI_KEY}.mockapi.io/api/users/${userId.value}/tasks`,
+    );
     if (!res.ok) {
       return { error: "No tasks were found." };
     }
@@ -196,10 +200,7 @@ export async function register(formData: FormData) {
   }
 }
 
-export async function login(formData: FormData): Promise<{
-  success?: UserType;
-  error?: string;
-}> {
+export async function login(formData: FormData) {
   const schema = z.object({
     username: z.string().min(5),
     password: z.string().min(5),
@@ -239,7 +240,7 @@ export async function login(formData: FormData): Promise<{
       httpOnly: true,
     });
 
-    return { success: foundUser };
+    revalidatePath("/");
   } catch (error) {
     throw new Error("Failed to log in");
   }

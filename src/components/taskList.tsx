@@ -4,40 +4,61 @@ import { useState } from "react";
 import { IoAdd } from "react-icons/io5";
 
 import { TaskType } from "@/lib/AppTypes";
+import { cookies } from "next/headers";
 import { AddTaskForm } from "./addForm";
+import { AuthForm } from "./authForm";
 import { FormDialog } from "./formDialog";
 import { TaskItem } from "./taskItem";
 
 type Props = {
+  userId?: string;
   tasks?: TaskType[];
   error?: string;
 };
-export const TaskList = ({ tasks, error }: Props) => {
+export const TaskList = ({ userId, tasks, error }: Props) => {
   const [isAddFormDialogOpen, setIsAddFormDialogOpen] = useState(false);
+  const [isAuthFormDialogOpen, setIsAuthFormDialogOpen] = useState(false);
 
   return (
-    <div className="max-w-xl w-full bg-grey-secondary rounded-xl lg:p-8 relative">
+    <div className="max-w-xl w-full bg-grey-secondary rounded-xl lg:p-8 relative flex flex-col items-center gap-4">
       {error && <p className="text-center text-2xl">{error}</p>}
-      {tasks && tasks.length > 0 && (
-        <div className="flex flex-col gap-5 overflow-auto max-h-[360px]">
-          {tasks.map((task) => (
-            <TaskItem key={task.id} task={task} />
-          ))}
-        </div>
+      {!userId && (
+        <button
+          className="text-lg bg-slate-200 px-4 py-1 rounded-lg"
+          onClick={() => setIsAuthFormDialogOpen(true)}
+        >
+          Authenticate
+        </button>
       )}
-      <button
-        className="rounded-full size-20 flex items-center justify-center bg-grey-primary absolute -bottom-[4rem] left-1/2 -translate-x-1/2"
-        onClick={() => setIsAddFormDialogOpen(true)}
-      >
-        <IoAdd className="text-red size-14" />
-      </button>
+      {tasks && tasks.length > 0 && (
+        <>
+          <div className="flex flex-col gap-5 overflow-auto max-h-[360px]">
+            {tasks.map((task) => (
+              <TaskItem key={task.id} task={task} />
+            ))}
+          </div>
+          <button
+            className="rounded-full size-20 flex items-center justify-center bg-grey-primary absolute -bottom-[4rem] left-1/2 -translate-x-1/2"
+            onClick={() => setIsAddFormDialogOpen(true)}
+          >
+            <IoAdd className="text-red size-14" />
+          </button>
+          <FormDialog
+            title="Add task"
+            description="Create a new task and add it to your todo list"
+            isOpen={isAddFormDialogOpen}
+            setIsOpen={setIsAddFormDialogOpen}
+          >
+            <AddTaskForm setIsDialogOpen={setIsAddFormDialogOpen} />
+          </FormDialog>
+        </>
+      )}
       <FormDialog
-        title="Add task"
-        description="Create a new task and add it to your todo list"
-        isOpen={isAddFormDialogOpen}
-        setIsOpen={setIsAddFormDialogOpen}
+        title="Authenticate"
+        isOpen={isAuthFormDialogOpen}
+        setIsOpen={setIsAuthFormDialogOpen}
       >
-        <AddTaskForm userId={"3"} setIsDialogOpen={setIsAddFormDialogOpen} />
+        <AuthForm setIsDialogOpen={setIsAuthFormDialogOpen} />
       </FormDialog>
     </div>
   );

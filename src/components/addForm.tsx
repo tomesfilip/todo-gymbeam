@@ -6,11 +6,10 @@ import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 
 type Props = {
-  userId: string;
   setIsDialogOpen: (value: boolean) => void;
 };
 
-export const AddTaskForm = ({ userId, setIsDialogOpen }: Props) => {
+export const AddTaskForm = ({ setIsDialogOpen }: Props) => {
   const ref = useRef<HTMLFormElement>(null);
 
   const { pending } = useFormStatus();
@@ -27,7 +26,6 @@ export const AddTaskForm = ({ userId, setIsDialogOpen }: Props) => {
       className="grid items-start gap-4"
     >
       <div className="grid gap-2">
-        <input type="hidden" name="userId" value={userId} />
         <label htmlFor="title">Task title</label>
         <input
           type="text"

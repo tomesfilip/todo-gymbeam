@@ -43,12 +43,3 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-**Componsents from Shadcn**
-Alert dialog - if user really wants to delete the task
-Badge - display category of the task
-Combobox - for the category of the task (create/edit form)
-DatePicker - for the due date of the task (create/edit form)
-Drawer - as a form to edit or create a task
-Switch - dark mode
-Toast - information (created task, updated task, deleted task, ...)

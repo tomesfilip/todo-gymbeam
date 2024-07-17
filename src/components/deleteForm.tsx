@@ -1,13 +1,13 @@
-import { TaskType } from "@/lib/AppTypes";
-import { deleteTask } from "@/server/actions";
-import { toast } from "sonner";
+import { TaskType } from '@/lib/AppTypes';
+import { deleteTask } from '@/server/actions';
+import { toast } from 'sonner';
 
-export const DeleteForm = ({ id, userId }: Pick<TaskType, "id" | "userId">) => {
+export const DeleteForm = ({ id, userId }: Pick<TaskType, 'id' | 'userId'>) => {
   return (
     <form
       action={async (formData) => {
         await deleteTask(formData);
-        toast("Task deleted");
+        toast('Task deleted');
       }}
     >
       <input type="hidden" name="taskId" value={id} />

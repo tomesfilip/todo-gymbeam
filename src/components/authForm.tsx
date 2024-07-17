@@ -1,8 +1,8 @@
-import { useRef } from "react";
-import { toast } from "sonner";
+import { useRef } from 'react';
+import { toast } from 'sonner';
 
-import { login, register } from "@/server/actions";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { login, register } from '@/server/actions';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 
 type Props = {
   setIsDialogOpen: (value: boolean) => void;
@@ -17,21 +17,11 @@ const AuthFormContent = ({ buttonText }: AuthFormContentProps) => {
     <>
       <div className="grid gap-1">
         <label htmlFor="name">Username</label>
-        <input
-          id="name"
-          type="text"
-          name="name"
-          className="px-2 py-1 border border-gray-500 rounded-lg"
-        />
+        <input id="name" type="text" name="name" className="px-2 py-1 border border-gray-500 rounded-lg" />
       </div>
       <div className="grid gap-1">
         <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          name="password"
-          className="px-2 py-1 border border-gray-500 rounded-lg"
-        />
+        <input id="password" type="password" name="password" className="px-2 py-1 border border-gray-500 rounded-lg" />
       </div>
       <button className="bg-gray-700 rounded-lg text-white px-4 py-2 disabled:bg-opacity-50 disabled:cursor-not-allowed">
         {buttonText}
@@ -61,7 +51,7 @@ export const AuthForm = ({ setIsDialogOpen }: Props) => {
             action={async (formData) => {
               refRegister.current?.reset();
               await register(formData);
-              toast("Registration successfull. Now please login");
+              toast('Registration successfull. Now please login');
             }}
             className="grid gap-4"
           >

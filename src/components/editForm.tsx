@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useRef, useState } from "react";
-import { useFormStatus } from "react-dom";
-import { toast } from "sonner";
+import { useRef, useState } from 'react';
+import { useFormStatus } from 'react-dom';
+import { toast } from 'sonner';
 
-import { TaskType } from "@/lib/AppTypes";
-import { editTask } from "@/server/actions";
+import { TaskType } from '@/lib/AppTypes';
+import { editTask } from '@/server/actions';
 
 type Props = {
   task: TaskType;
@@ -27,7 +27,7 @@ export const EditForm = ({ task, setIsDialogOpen }: Props) => {
       action={async (formData) => {
         ref.current?.reset();
         await editTask(formData);
-        toast("Task updated successfully");
+        toast('Task updated successfully');
         setIsDialogOpen(false);
       }}
       className="grid items-start gap-4"

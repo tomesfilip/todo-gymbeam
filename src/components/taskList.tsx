@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { IoAdd } from "react-icons/io5";
+import { useState } from 'react';
+import { IoAdd } from 'react-icons/io5';
 
-import { TaskType } from "@/lib/AppTypes";
-import { AddTaskForm } from "./addForm";
-import { AuthForm } from "./authForm";
-import { FormDialog } from "./formDialog";
-import { TaskItem } from "./taskItem";
+import { TaskType } from '@/lib/AppTypes';
+import { AddTaskForm } from './addForm';
+import { AuthForm } from './authForm';
+import { FormDialog } from './formDialog';
+import { TaskItem } from './taskItem';
 
 type Props = {
   userId?: string;
@@ -22,10 +22,7 @@ export const TaskList = ({ userId, tasks, error }: Props) => {
     <div className="max-w-xl w-full bg-grey-secondary rounded-xl lg:p-8 relative flex flex-col items-center gap-4">
       {error && <p className="text-center text-2xl">{error}</p>}
       {!userId && (
-        <button
-          className="text-lg bg-slate-200 px-4 py-1 rounded-lg"
-          onClick={() => setIsAuthFormDialogOpen(true)}
-        >
+        <button className="text-lg bg-slate-200 px-4 py-1 rounded-lg" onClick={() => setIsAuthFormDialogOpen(true)}>
           Authenticate
         </button>
       )}
@@ -54,11 +51,7 @@ export const TaskList = ({ userId, tasks, error }: Props) => {
           ))}
         </div>
       )}
-      <FormDialog
-        title="Authenticate"
-        isOpen={isAuthFormDialogOpen}
-        setIsOpen={setIsAuthFormDialogOpen}
-      >
+      <FormDialog title="Authenticate" isOpen={isAuthFormDialogOpen} setIsOpen={setIsAuthFormDialogOpen}>
         <AuthForm setIsDialogOpen={setIsAuthFormDialogOpen} />
       </FormDialog>
     </div>

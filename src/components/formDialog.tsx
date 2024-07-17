@@ -1,12 +1,6 @@
-import { ReactNode } from "react";
-import { useMediaQuery } from "usehooks-ts";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "./ui/dialog";
+import { ReactNode } from 'react';
+import { useMediaQuery } from 'usehooks-ts';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
 import {
   Drawer,
   DrawerClose,
@@ -15,7 +9,7 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "./ui/drawer";
+} from './ui/drawer';
 
 type Props = {
   isOpen: boolean;
@@ -26,15 +20,8 @@ type Props = {
   children: ReactNode;
 };
 
-export const FormDialog = ({
-  isOpen,
-  setIsOpen,
-  title,
-  description,
-  children,
-  cancelButtonText = "Cancel",
-}: Props) => {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+export const FormDialog = ({ isOpen, setIsOpen, title, description, children, cancelButtonText = 'Cancel' }: Props) => {
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   if (isDesktop) {
     return (
@@ -42,9 +29,7 @@ export const FormDialog = ({
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
-            {description && (
-              <DialogDescription>{description}</DialogDescription>
-            )}
+            {description && <DialogDescription>{description}</DialogDescription>}
           </DialogHeader>
           {children}
         </DialogContent>
@@ -61,9 +46,7 @@ export const FormDialog = ({
         <div className="px-4">{children}</div>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
-            <button className="py-2 border border-gray-400 rounded-lg">
-              {cancelButtonText}
-            </button>
+            <button className="py-2 border border-gray-400 rounded-lg">{cancelButtonText}</button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

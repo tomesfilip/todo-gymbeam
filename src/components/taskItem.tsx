@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import clsx from "clsx";
-import { useState } from "react";
-import { FaTrash } from "react-icons/fa";
-import { MdEdit } from "react-icons/md";
-import { TaskType } from "../lib/AppTypes";
-import { DeleteForm } from "./deleteForm";
-import { EditForm } from "./editForm";
-import { FormDialog } from "./formDialog";
-import { ToggleCompletedForm } from "./toggleCompletedForm";
+import clsx from 'clsx';
+import { useState } from 'react';
+import { FaTrash } from 'react-icons/fa';
+import { MdEdit } from 'react-icons/md';
+import { TaskType } from '../lib/AppTypes';
+import { DeleteForm } from './deleteForm';
+import { EditForm } from './editForm';
+import { FormDialog } from './formDialog';
+import { ToggleCompletedForm } from './toggleCompletedForm';
 
 type TaskItemProps = {
   task: TaskType;
@@ -23,29 +23,19 @@ export const TaskItem = ({ task }: TaskItemProps) => {
   return (
     <>
       <div className="h-8 flex justify-between items-center gap-2 md:gap-4 px-2 w-full">
-        <ToggleCompletedForm
-          id={id}
-          userId={userId}
-          isCompleted={isCompleted}
-        />
+        <ToggleCompletedForm id={id} userId={userId} isCompleted={isCompleted} />
         <p
-          className={clsx("truncate w-full max-w-4/5", {
-            "line-through": isCompleted,
+          className={clsx('truncate w-full max-w-4/5', {
+            'line-through': isCompleted,
           })}
         >
           {title}
         </p>
         <div className="flex gap-2">
-          <button
-            className="bg-blue-600 p-2 rounded-full"
-            onClick={() => setIsEditDialogOpen(true)}
-          >
+          <button className="bg-blue-600 p-2 rounded-full" onClick={() => setIsEditDialogOpen(true)}>
             <MdEdit color="white" />
           </button>
-          <button
-            className="bg-red-600 p-2 rounded-full"
-            onClick={() => setIsDeleteDialogOpen(true)}
-          >
+          <button className="bg-red-600 p-2 rounded-full" onClick={() => setIsDeleteDialogOpen(true)}>
             <FaTrash color="white" />
           </button>
         </div>

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { addTask } from "@/server/actions";
-import { useRef } from "react";
-import { useFormStatus } from "react-dom";
-import { toast } from "sonner";
+import { addTask } from '@/server/actions';
+import { useRef } from 'react';
+import { useFormStatus } from 'react-dom';
+import { toast } from 'sonner';
 
 type Props = {
   setIsDialogOpen: (value: boolean) => void;
@@ -20,7 +20,7 @@ export const AddTaskForm = ({ setIsDialogOpen }: Props) => {
       action={async (formData) => {
         ref.current?.reset();
         await addTask(formData);
-        toast("Task added successfully");
+        toast('Task added successfully');
         setIsDialogOpen(false);
       }}
       className="grid items-start gap-4"
